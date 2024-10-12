@@ -1,0 +1,6 @@
+Foo
+Bar
+That
+Was
+Test B
+[:test]
