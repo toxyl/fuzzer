@@ -8,13 +8,22 @@ import (
 // it will recursively load the files from the given directory into memory.
 // You can supply additional functions to the fuzzer using the userFns param.
 // These can then be used with the `[$fn:arg1;arg2;...;argN]` syntax.
+//
+// Calling Init() multiple times will add files and user functions to the
+// existing instance.
 func Init(dataDir string, userFns map[string]func(args ...string) string) {
 	dataDir = strings.TrimSpace(dataDir)
 	if dataDir != "" {
 		importFromDir(dataDir)
 	}
-	fz = &fuzzer{
-		fns: userFns,
+	if fz == nil {
+		fz = &fuzzer{
+			fns: userFns,
+		}
+	} else {
+		for k, fn := range userFns {
+			fz.fns[k] = fn
+		}
 	}
 }
 
